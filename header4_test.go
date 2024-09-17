@@ -9,21 +9,23 @@ import (
 	"testing"
 )
 
+// dan handler ini ibaratnya adalah server
 func RequestHeader(writer http.ResponseWriter, request *http.Request) {
 	contentType := request.Header.Get("content-type") // ambil header dari client
 	fmt.Fprint(writer, contentType)
 }
 
+// jadi test ini ibaratnya adalah client
 func TestRequestHeader(t *testing.T) {
-	request := httptest.NewRequest(http.MethodGet, "http://localhost:8080/login", nil)
+	request := httptest.NewRequest(http.MethodGet, "http://localhost:8080/", nil)
 	request.Header.Add("content-type", "application/json") // mengirim request ke server dengan menambahkan header
 
-	response := httptest.NewRecorder()
+	recorder := httptest.NewRecorder()
 
-	RequestHeader(response, request)
+	RequestHeader(recorder, request)
 
-	result := response.Result()
-	body, _ := io.ReadAll(result.Body)
+	response := recorder.Result()
+	body, _ := io.ReadAll(response.Body)
 
 	assert.Equal(t, "application/json", string(body))
 }
@@ -35,14 +37,14 @@ func ResponseHeader(w http.ResponseWriter, r *http.Request) {
 }
 
 func TestResponseHeader(t *testing.T) {
-	request := httptest.NewRequest(http.MethodGet, "http://localhost:8080", nil)
-	response := httptest.NewRecorder()
+	request := httptest.NewRequest(http.MethodGet, "http://localhost:8080/", nil)
+	recorder := httptest.NewRecorder()
 
-	ResponseHeader(response, request)
+	ResponseHeader(recorder, request)
 
-	result := response.Result()
-	body, _ := io.ReadAll(result.Body)
+	response := recorder.Result()
+	body, _ := io.ReadAll(response.Body)
 
 	assert.Equal(t, "OK\n", string(body))
-	assert.Equal(t, "Ilham Muhammad Sidiq", response.Header().Get("X-Powered-By"))
+	assert.Equal(t, "Ilham Muhammad Sidiq", response.Header.Get("X-Powered-By"))
 }

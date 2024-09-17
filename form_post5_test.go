@@ -25,12 +25,12 @@ func TestPostForm(t *testing.T) {
 	//headernya pake x-www-form-urlencoded karna ngirimnya lewat form
 	request.Header.Add("content-type", "application/x-www-form-urlencoded")
 
-	response := httptest.NewRecorder()
+	recorder := httptest.NewRecorder()
 
-	FormPost(response, request)
+	FormPost(recorder, request)
 
-	result := response.Result()
-	body, err := io.ReadAll(result.Body)
+	response := recorder.Result()
+	body, err := io.ReadAll(response.Body)
 
 	assert.Nil(t, err)
 	assert.Equal(t, "Hallo Ilham Muhammad Sidiq", string(body))

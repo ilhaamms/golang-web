@@ -15,6 +15,8 @@ func SetCookie(w http.ResponseWriter, r *http.Request) {
 	cookie.Value = r.URL.Query().Get("role")
 	cookie.Path = "/"
 
+	w.Header().Add("content-type", "application/json")
+	w.WriteHeader(http.StatusCreated)
 	http.SetCookie(w, cookie)
 	fmt.Fprintln(w, "success create cookie")
 }
@@ -42,6 +44,9 @@ func TestSetCookie(t *testing.T) {
 		assert.Equal(t, "admin", cookie.Value)
 	}
 
+	assert.Equal(t, "application/json", response.Header.Get("content-type"))
+	assert.Equal(t, http.StatusCreated, response.StatusCode)
+
 }
 
 func TestGetCookieFailed(t *testing.T) {
@@ -51,9 +56,9 @@ func TestGetCookieFailed(t *testing.T) {
 	GetCookie(recorder, request)
 
 	response := recorder.Result()
-	body, errReadBody := io.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 
-	assert.Nil(t, errReadBody)
+	assert.Nil(t, err)
 	assert.Equal(t, "no cookie\n", string(body))
 }
 
@@ -70,8 +75,8 @@ func TestGetCookieSuccess(t *testing.T) {
 	GetCookie(recorder, request)
 
 	response := recorder.Result()
-	body, errReadBody := io.ReadAll(response.Body)
+	body, err := io.ReadAll(response.Body)
 
-	assert.Nil(t, errReadBody)
+	assert.Nil(t, err)
 	assert.Equal(t, "hallo admin", string(body))
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+    <title>{{.Title}}</title>
+</head>
+<body>
+    <h1>Hallo {{.Name}}</h1>
+    {{/*ini adalah komentar*/}}
+    {{/*pake with kalau nested struct, jadi sama aja kayak AddressWith.Street dan AddressWith.City*/}}
+{{with .AddressWith}}
+    <h2>Alamat {{.Street}}</h2>
+    <h2>City {{.City}}</h2>
+{{end}}
+</body>
+</html>

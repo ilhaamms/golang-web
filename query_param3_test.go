@@ -29,14 +29,14 @@ func SayHelloMultiple(w http.ResponseWriter, r *http.Request) {
 
 func TestQueryParam(t *testing.T) {
 	request := httptest.NewRequest(http.MethodGet, "http://localhost:8080?name=Ilham", nil)
-	response := httptest.NewRecorder()
+	recorder := httptest.NewRecorder()
 
-	SayHello(response, request)
+	SayHello(recorder, request)
 
-	result := response.Result()
-	body, _ := io.ReadAll(result.Body)
+	response := recorder.Result()
+	body, _ := io.ReadAll(response.Body)
 
-	assert.Equal(t, 200, response.Code)
+	assert.Equal(t, 200, recorder.Code)
 	assert.Equal(t, "Hello Ilham", string(body))
 }
 

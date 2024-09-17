@@ -1,0 +1,11 @@
+{{define "layout"}} {{/*pake define untuk namain templatenya, jadi pas manggil nama templaenya tinggal panggil sesuai nama yang udah di define*/}}
+    {{template "header" .}} {{/*cara ngirim semua data ke header.gohtml pake tanda .*/}}}
+    <h1>Hallo {{.Name}}</h1>
+    {{template "footer"}}
+{{end}}
+
+{{/*kita bisa define banyak template di 1 file yang sama, dan ini beda, jadi gasaling terhubung*/}}
+{{define "test"}}
+<h1>Hallo {{.Name}}</h1>
+{{end}}
+
