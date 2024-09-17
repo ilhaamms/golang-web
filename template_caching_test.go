@@ -4,11 +4,11 @@ import (
 	"embed"
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"html/template"
 	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
-	"text/template"
 )
 
 //go:embed templates/*.gohtml
@@ -19,7 +19,10 @@ var templateCaching embed.FS
 var dataTemplate = template.Must(template.ParseFS(templateCaching, "templates/*.gohtml"))
 
 func TemplateCaching(w http.ResponseWriter, r *http.Request) {
-	dataTemplate.ExecuteTemplate(w, "caching.gohtml", "Hello template caching")
+	err := dataTemplate.ExecuteTemplate(w, "caching.gohtml", "Hello template caching")
+	if err != nil {
+		return
+	}
 }
 
 func TestTemplateCaching(t *testing.T) {
